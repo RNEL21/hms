@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HMS — Система управления гостиницей</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+
+<!-- ── навбар ─────────────────────────────────────────── -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="landing.html" class="nav-logo">🏨 <span>HMS</span></a>
+    <div class="nav-links">
+      <a href="landing.html" class="nav-link active">О системе</a>
+      <a href="login.html"   class="nav-link">Войти</a>
+      <a href="rooms.html"   class="nav-link">Номера</a>
+      <a href="bookings.html" class="nav-link">Бронирования</a>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-btn" onclick="theme.toggle()">🌙</button>
+      <a href="login.html" class="btn btn-primary btn-sm">Войти</a>
+      <button class="hamburger" onclick="sidebar.open()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- мобильный сайдбар -->
+<div id="overlay" class="sidebar-overlay" onclick="sidebar.close()"></div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-logo">🏨 HMS</div>
+  <a href="landing.html"   class="sidebar-link active"><span class="icon">🏠</span>О системе</a>
+  <a href="login.html"     class="sidebar-link"><span class="icon">📊</span>Войти в панель</a>
+  <a href="rooms.html"     class="sidebar-link"><span class="icon">🛏</span>Номера</a>
+  <a href="guests.html"    class="sidebar-link"><span class="icon">👤</span>Гости</a>
+  <a href="bookings.html"  class="sidebar-link"><span class="icon">📅</span>Бронирования</a>
+  <div class="sidebar-bottom">
+    <button class="sidebar-link side-theme-btn" style="width:100%;border:none;background:none;cursor:pointer;text-align:left;" onclick="theme.toggle()">
+      <span class="icon">🌙</span>Сменить тему
+    </button>
+    <a href="login.html" class="btn btn-primary" style="justify-content:center;">Войти</a>
+  </div>
+</aside>
+
+<!-- ── хиро ───────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-tag" data-aos="fade-down">
+        🚀 Hotel Management System v1.0
+      </div>
+      <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
+        Управляй<br><em>гостиницей</em><br>умнее
+      </h1>
+      <p class="hero-desc" data-aos="fade-up" data-aos-delay="200">
+        Современная система для автоматизации бронирований,
+        учёта гостей и управления номерным фондом.
+        Всё в одном интерфейсе.
+      </p>
+      <div class="hero-btns" data-aos="fade-up" data-aos-delay="300">
+        <a href="login.html"  class="btn btn-primary btn-lg">Войти в систему →</a>
+      </div>
+    </div>
+
+    <div class="hero-card" data-aos="fade-left" data-aos-delay="200">
+      <div class="glass" style="padding:28px;">
+        <div style="font-size:.82rem;font-weight:600;color:var(--text-3);margin-bottom:20px;text-transform:uppercase;letter-spacing:.06em;">Статистика сегодня</div>
+        <div class="hero-stat-grid" id="heroStats">
+          <div class="glass hero-stat"><div class="hero-stat-val num">—</div><div class="hero-stat-lbl">Всего номеров</div></div>
+          <div class="glass hero-stat"><div class="hero-stat-val num" style="color:var(--success)">—</div><div class="hero-stat-lbl">Свободно</div></div>
+          <div class="glass hero-stat"><div class="hero-stat-val num" style="color:var(--danger)">—</div><div class="hero-stat-lbl">Занято</div></div>
+          <div class="glass hero-stat"><div class="hero-stat-val num">—</div><div class="hero-stat-lbl">Активных броней</div></div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+          <div style="font-size:.82rem;font-weight:600;color:var(--text-3);margin-bottom:12px;">Последнее бронирование</div>
+          <div id="lastBooking" style="font-size:.9rem;color:var(--text-2);">Загрузка...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── фичи ───────────────────────────────────────── -->
+<section class="section" style="background:var(--bg2);">
+  <div class="section-inner">
+    <div class="section-tag" data-aos="fade-up">
+      <span class="badge badge-accent">Возможности</span>
+    </div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="50">Всё что нужно для работы</h2>
+    <p class="section-sub" data-aos="fade-up" data-aos-delay="100">
+      Система охватывает все ключевые процессы управления гостиницей
+    </p>
+    <div class="features-grid">
+      <div class="glass feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon">🛏</div>
+        <div class="feature-title">Номерной фонд</div>
+        <p class="feature-desc">Управление всеми номерами: типы, цены, статусы в реальном времени</p>
+      </div>
+      <div class="glass feature-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="feature-icon">👤</div>
+        <div class="feature-title">База гостей</div>
+        <p class="feature-desc">Хранение персональных и паспортных данных согласно ФЗ-152</p>
+      </div>
+      <div class="glass feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon">📅</div>
+        <div class="feature-title">Бронирования</div>
+        <p class="feature-desc">Создание и управление бронями с автоматическим изменением статуса номеров</p>
+      </div>
+      <div class="glass feature-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Аналитика</div>
+        <p class="feature-desc">Графики занятости, статистика по типам номеров и активности бронирований</p>
+      </div>
+      <div class="glass feature-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon">🔔</div>
+        <div class="feature-title">Уведомления</div>
+        <p class="feature-desc">Автоматические напоминания о гостях, у которых сегодня дата выезда</p>
+      </div>
+      <div class="glass feature-card" data-aos="fade-up" data-aos-delay="350">
+        <div class="feature-icon">🌙</div>
+        <div class="feature-title">Тёмная тема</div>
+        <p class="feature-desc">Комфортная работа в любое время суток с переключением темы оформления</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Room Types ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-tag" data-aos="fade-up">
+      <span class="badge badge-accent">Номера</span>
+    </div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="50">Типы номеров</h2>
+    <p class="section-sub" data-aos="fade-up" data-aos-delay="100">Четыре категории на любой вкус и бюджет</p>
+    <div class="room-types-grid">
+      <div class="glass room-type-card" data-aos="zoom-in" data-aos-delay="100" onclick="window.location='rooms.html'">
+        <div class="room-type-emoji">🛏</div>
+        <div class="room-type-name">Одноместный</div>
+        <div class="room-type-price num">3 000</div>
+        <div class="room-type-label">₽ / ночь</div>
+      </div>
+      <div class="glass room-type-card" data-aos="zoom-in" data-aos-delay="150" onclick="window.location='rooms.html'">
+        <div class="room-type-emoji">🛏🛏</div>
+        <div class="room-type-name">Двухместный</div>
+        <div class="room-type-price num">4 000</div>
+        <div class="room-type-label">₽ / ночь</div>
+      </div>
+      <div class="glass room-type-card" data-aos="zoom-in" data-aos-delay="200" onclick="window.location='rooms.html'">
+        <div class="room-type-emoji">🌟</div>
+        <div class="room-type-name">Полулюкс</div>
+        <div class="room-type-price num">5 000</div>
+        <div class="room-type-label">₽ / ночь</div>
+      </div>
+      <div class="glass room-type-card" data-aos="zoom-in" data-aos-delay="250" onclick="window.location='rooms.html'">
+        <div class="room-type-emoji">👑</div>
+        <div class="room-type-name">Люкс</div>
+        <div class="room-type-price num">7 500</div>
+        <div class="room-type-label">₽ / ночь</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ─────────────────────────────────────────────── -->
+<section class="cta-section">
+  <h2 data-aos="fade-up">Готовы начать?</h2>
+  <p data-aos="fade-up" data-aos-delay="100">Откройте панель управления и начните работу прямо сейчас</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;" data-aos="fade-up" data-aos-delay="200">
+    <a href="login.html" class="btn btn-white btn-lg">Войти в систему →</a>
+    <a href="landing.html" class="btn btn-lg" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);">Узнать больше</a>
+  </div>
+</section>
+
+<!-- ── футер ─────────────────────────────────────────── -->
+<footer style="background:var(--bg2);border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text-3);font-size:.85rem;">
+  🏨 HMS — Hotel Management System &nbsp;·&nbsp; 2025
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="js/app.js"></script>
+<script src="js/api.js"></script>
+<script>
+  AOS.init({ duration: 650, once: true, offset: 60 });
+
+  // заполняем статистику на hero
+  document.addEventListener('DOMContentLoaded', () => {
+    const s  = DB.getStats();
+    const vals = document.querySelectorAll('.hero-stat-val');
+    vals[0].textContent = s.total;
+    vals[1].textContent = s.free;
+    vals[2].textContent = s.busy;
+    vals[3].textContent = s.active;
+
+    const bookings = DB.getBookings();
+    const last = bookings.filter(b => b.status === 'активна').at(-1);
+    const lb   = document.getElementById('lastBooking');
+    lb.innerHTML = last
+      ? `<strong>${utils.escapeHtml(last.guest_name)}</strong> — №${utils.escapeHtml(last.room_number)}<br>
+         <span style="color:var(--text-3);font-size:.8rem;">${last.check_in} → ${last.check_out}</span>`
+      : 'Нет активных бронирований';
+  });
+</script>
+</body>
+</html>

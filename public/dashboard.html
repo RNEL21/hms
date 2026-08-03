@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Главная — HMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- ── Sidebar ──────────────────────────────────────── -->
+  <aside class="app-sidebar">
+    <div class="sidebar-brand">🏨</div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="s-item active" data-tip="Главная"><i data-lucide="house"></i></a>
+      <a href="rooms.html"     class="s-item" data-tip="Номера"><i data-lucide="bed-double"></i></a>
+      <a href="guests.html"    class="s-item" data-tip="Гости"><i data-lucide="users"></i></a>
+      <a href="bookings.html"  class="s-item" data-tip="Бронирования"><i data-lucide="calendar-days"></i></a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="s-item" id="themeBtn" data-tip="Сменить тему" onclick="theme.toggle()">
+        <i data-lucide="moon"></i>
+      </button>
+      <button onclick="doLogout()" class="s-item s-logout" data-tip="Выйти">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Mobile ────────────────────────────────────────── -->
+  <div id="mobOverlay" class="mob-overlay" onclick="sidebar.close()"></div>
+  <div id="mobSidebar" class="mob-sidebar">
+    <div class="mob-sidebar-header">🏨 HMS
+      <button class="mob-close" onclick="sidebar.close()"><i data-lucide="x"></i></button>
+    </div>
+    <nav class="mob-nav">
+      <a href="dashboard.html" class="mob-link active"><i data-lucide="house"></i>Главная</a>
+      <a href="rooms.html"     class="mob-link"><i data-lucide="bed-double"></i>Номера</a>
+      <a href="guests.html"    class="mob-link"><i data-lucide="users"></i>Гости</a>
+      <a href="bookings.html"  class="mob-link"><i data-lucide="calendar-days"></i>Бронирования</a>
+    </nav>
+    <div class="mob-footer">
+      <button class="mob-link" style="width:100%;text-align:left;font-family:inherit;" onclick="theme.toggle();sidebar.close()">
+        <i data-lucide="moon" id="mobThemeIcon"></i>Сменить тему
+      </button>
+      <button onclick="doLogout()" class="mob-link"><i data-lucide="log-out"></i>Выйти</button>
+    </div>
+  </div>
+
+  <!-- ── Main ──────────────────────────────────────────── -->
+  <div class="app-main">
+    <header class="app-header">
+      <div class="app-header-left">
+        <button class="app-hamburger" onclick="sidebar.open()"><i data-lucide="menu"></i></button>
+        <span class="app-header-title">Главная</span>
+        <span class="app-header-sub" id="todayDate"></span>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openAddBooking()">
+        <i data-lucide="plus" style="width:20px;height: 20px;"></i> Новое бронирование
+      </button>
+    </header>
+
+    <div class="app-content">
+
+      <!-- Checkout alert -->
+      <div id="checkoutAlert" class="alert alert-warn" style="display:none;">
+        <span class="alert-icon"><i data-lucide="triangle-alert" style="width:16px;height:16px;"></i></span>
+        <div id="checkoutText"></div>
+      </div>
+
+      <!-- Dash top blocks -->
+      <div class="dash-top">
+
+        <!-- Бронирования -->
+        <div class="card bk-card">
+          <div class="block-title">Бронирования</div>
+          <div class="bk-stats">
+            <div class="bk-stat">
+              <div class="bk-val num" id="bkActive">—</div>
+              <div class="bk-lbl">Активных</div>
+            </div>
+            <div class="bk-stat">
+              <div class="bk-val num" id="bkIn">—</div>
+              <div class="bk-lbl">Заезд сегодня</div>
+            </div>
+            <div class="bk-stat">
+              <div class="bk-val num" id="bkOut">—</div>
+              <div class="bk-lbl">Выезд сегодня</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Занятость -->
+        <div class="card occ-card">
+          <div class="block-title">Занятость</div>
+          <div class="occ-numbers">
+            <div class="occ-num">
+              <div class="occ-val num" id="occTotal">—</div>
+              <div class="occ-lbl">Всего номеров</div>
+            </div>
+            <div class="occ-num">
+              <div class="occ-val num" id="occFree" style="color:var(--success)">—</div>
+              <div class="occ-lbl">Свободно</div>
+            </div>
+            <div class="occ-num">
+              <div class="occ-val num" id="occBusy" style="color:var(--danger)">—</div>
+              <div class="occ-lbl">Занято</div>
+            </div>
+          </div>
+          <div class="occ-bar">
+            <div class="occ-seg-free" id="occBarFree" style="width:0%"></div>
+            <div class="occ-seg-busy" id="occBarBusy" style="width:0%"></div>
+          </div>
+          <div class="occ-legend">
+            <span><span class="occ-dot" style="background:var(--success)"></span>Свободно</span>
+            <span><span class="occ-dot" style="background:var(--danger)"></span>Занято</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="card chart-card">
+          <div class="chart-title">Бронирования по месяцам</div>
+          <div class="chart-canvas-wrap">
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+        <div class="card chart-card">
+          <div class="chart-title">Типы номеров</div>
+          <div class="chart-canvas-wrap">
+            <canvas id="donutChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent bookings -->
+      <div class="card" style="overflow:hidden;">
+        <div style="padding:18px 22px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);">
+          <span style="font-weight:700;font-size:.95rem;">Последние бронирования</span>
+          <a href="bookings.html" class="btn btn-ghost btn-sm">Все →</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Гость</th><th>Номер</th><th>Тип</th>
+                <th>Заезд</th><th>Выезд</th><th>Статус</th>
+              </tr>
+            </thead>
+            <tbody id="recentBookings"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/imask@7/dist/imask.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/api.js"></script>
+<script src="js/booking-modal.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

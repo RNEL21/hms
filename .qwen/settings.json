@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//C:/Users/vladi/Desktop/hms/docs/**)"
+    ]
+  },
+  "$version": 4
+}
